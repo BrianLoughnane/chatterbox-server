@@ -3,7 +3,7 @@ var data = {
 }
 
 var requestHandler = function(request, response) {
-
+  debugger
   if(request.method === 'GET') {
     var statusCode = 200;
     var headers = defaultCorsHeaders;
@@ -15,7 +15,19 @@ var requestHandler = function(request, response) {
     response.end();
   }
 
-  if(request.method === 'POST' && request.url === '/send') {
+  if(request.method === 'OPTIONS') {
+    var permitted = 200;
+    var denied = 403;
+    var method = request.headers['access-control-request-method'];
+    var allowed = (defaultCorsHeaders['access-control-allow-methods'].split(', ').indexOf(method) > -1) ? true : false;
+    var statusCode = allowed ? permitted : denied;
+    var headers = defaultCorsHeaders;
+    headers['Content-Type'] = "text/plain";
+    response.writeHead(statusCode, headers);
+    response.end();
+  }
+
+  if(request.method === 'POST') {
     request.on('readable', function () {
       var statusCode = 200;
       var headers = defaultCorsHeaders;

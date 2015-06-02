@@ -10,7 +10,7 @@
     <script src="bower_components/underscore/underscore-min.js"></script>
     <script src="bower_components/backbone/backbone-min.js"></script>
     <!-- your scripts -->
-    <script src="env/config.js"></script>
+    <!-- <script src="env/config.js"></script> -->
     <script src="scripts/backboneApp.js"></script>
   </head>
   <body>
@@ -29,9 +29,10 @@
         // Backbone-based app initialization
         var messages = new Messages();
         messages.loadMsgs();
-        var formView = new FormView({el: $('#main'), collection: messages})
+        var formView = new FormView({el: $('#send'), collection: messages})
         var messagesView = new MessagesView({el: $('#chats'), collection: messages});
-        setInterval( messages.loadMsgs.bind(messages), 1000 );
+        //free function invocation, provide this context
+        //setInterval( messages.loadMsgs.bind(messages), 1000 );
         // jQuery-based app initialization
         //app.init();
       });

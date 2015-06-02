@@ -1,5 +1,11 @@
 var Message = Backbone.Model.extend({
-  url: 'https://api.parse.com/1/classes/chatterbox/',
+
+  initialize: function() {
+    this.collection.counter++;
+    this.set('objectId', this.collection.counter);
+  },
+
+  url: 'http://127.0.0.1:3000',
   defaults: {
     username: 'No Name',
     text: "No Message"
@@ -7,39 +13,62 @@ var Message = Backbone.Model.extend({
 });
 
 var Messages = Backbone.Collection.extend({
-  url: 'https://api.parse.com/1/classes/chatterbox',
+  // url: 'https://api.parse.com/1/classes/chatterbox',
+  initialize: function () {
+    // this.on('change', function (e) {
+    //   //this.loadMsgs();
+    // }, this);
+
+    // this.on('add', function (e) {
+    // }, this);
+  },
+  counter: 0,
+
+  url: 'http://127.0.0.1:3000',
+
+  // parse is a native function that will execute after a successful .fetch().
+  // It will pass the fetched data as an argument
+  //
+  //
   parse: function (data) {
     console.log(data);
     var results = [];
-    for(var i = data.results.length-1; i > -1; i-- ) {
-      results.push(data.results[i]);
+    var result;
+
+    for(var i = 0; i < data.results.length; i++) {
+      result = data.results[i];
+      if(result.objectId > Messages.counter){
+        results.push(data.results[i]);
+      }
     }
     return results;
   },
   model: Message,
+
   loadMsgs: function() {
-    this.fetch({
-      data: {
-        order: "-createdAt"
-      }
-    });
+    this.fetch();
+    //returns a JSON array of models.
   }
 });
 
 
 var FormView = Backbone.View.extend({
 
-  events: {
-    'click #send': 'handleSubmit'
-  },
-  handleSubmit: function(e){
-    e.preventDefault();
+  // initialize: function () {
+  // },
 
+  events: {
+    // 'click .submit': this.handleSubmit
+    'click .submit': 'handleSubmit'
+  },
+
+  handleSubmit: function(){
     var $text = this.$('#message');
     this.collection.create({
       username: this.$('.name').val(),
       text: $text.val()
     });
+
     $text.val('');
   },
 
@@ -60,7 +89,7 @@ var MessageView = Backbone.View.extend({
 
 var MessagesView = Backbone.View.extend({
   initialize: function(){
-    this.collection.on('sync', this.render, this);
+    this.collection.on('add', this.render, this);
     this.onscreenMessages = {};
   },
 
@@ -92,10 +121,8 @@ var MessagesView = Backbone.View.extend({
 
 
 
-// var mostRecentMessage;
-
-// var app = {
-//   server: 'https://api.parse.com/1/classes/chatterbox',
+// var mostRecentMessager app = {
+//   server: '
 //   init: function() {
 
 
