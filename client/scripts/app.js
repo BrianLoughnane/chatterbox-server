@@ -28,7 +28,7 @@ var app = {
 
         $.ajax({
           // always use this url
-          url: app.server,
+          url: app.server + '/send',
           type: 'POST',
           data: JSON.stringify(message),
           //contentType: 'application/json',
@@ -49,14 +49,11 @@ var app = {
   fetch: function() {
       console.log('refreshed');
       $.ajax({
-        url: app.server,
+        // url: app.server + '/classes/room1',
+        url: app.server + '/classes/room1',
         type:'GET',
-        // data: {
-        //   'lastfetch' : new Date()
-        // },
-        // contentType: 'application/json',
-        success:function(results) {
-          results = JSON.parse(results);
+        success:function(data) {
+          results = JSON.parse(data).results;
           console.log(results);
           for(var i=0; i < results.length; i++) {
             var time = results[i].time;

@@ -1,9 +1,10 @@
-var data = [{username: 'brian', text: 'yolo', time: 1433202049000}];
+var data = {
+  results: [{username: 'brian', text: 'yolo', time: 1433202049000}]
+}
 
 var requestHandler = function(request, response) {
 
   if(request.method === 'GET') {
-
     var statusCode = 200;
     var headers = defaultCorsHeaders;
     // You will need to change this if you are sending something other than plain text, like JSON or HTML.
@@ -14,7 +15,7 @@ var requestHandler = function(request, response) {
     response.end();
   }
 
-  if(request.method === 'POST') {
+  if(request.method === 'POST' && request.url === '/send') {
     request.on('readable', function () {
       var statusCode = 200;
       var headers = defaultCorsHeaders;
@@ -30,7 +31,7 @@ var requestHandler = function(request, response) {
       }
 
       chat = JSON.parse(chat);
-      data.push(chat);
+      data.results.push(chat);
       console.log(chat);
       console.log('data', data);
       // response.write(JSON.stringify(data));
