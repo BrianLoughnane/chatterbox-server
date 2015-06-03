@@ -31,10 +31,7 @@
         messages.loadMsgs();
         var formView = new FormView({el: $('#send'), collection: messages})
         var messagesView = new MessagesView({el: $('#chats'), collection: messages});
-        //free function invocation, provide this context
-        //setInterval( messages.loadMsgs.bind(messages), 1000 );
-        // jQuery-based app initialization
-        //app.init();
+        setInterval( messages.loadMsgs.bind(messages), 1000 );
       });
     </script>
   </body>
